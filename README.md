@@ -8,19 +8,17 @@ This is a guide for Coinbase engineers developing EVM-based smart contracts. We 
 
 ### B. Exceptions
 
-#### 1. Library internal function names do not require underscore prefix.
+#### 1. Internal functions in a library should not have an underscore prefix in their name.
 
 The style guide states
 
-> Underscore Prefix for Non-external Functions and Variables.
+> Underscore Prefix for Non-external Functions and Variables
 
-Library internal functions do not have to follow this rule.
+One of the motivations for this rule is that it is a helpful visual clue.
 
-Whether a library functions are internal or external has important implications. From the [documentation](https://docs.soliditylang.org/en/latest/contracts.html#libraries)
+> Leading underscores allow you to immediately recognize the intent of such functions...
 
-> ... the code of internal library functions that are called from a contract and all functions called from therein will at compile time be included in the calling contract, and a regular JUMP call will be used instead of a DELEGATECALL.
-
-Developers may prefer internal functions because they are more gas efficient to call. However, calling a library function with a leading underscore looks like the contract is accessing some internal function it should not be.
+We agree that a leading underscore is a useful visual clue, and this is why we oppose using them for internal library functions that can be called from other contracts. Visually, it looks wrong.
 
 ```
 Library._function()
@@ -33,7 +31,15 @@ using Library for bytes
 bytes._function()
 ```
 
-For this reason, we allow libraries to have internal functions with no underscore prefix.
+You might ask, "Why not just use public functions in these cases?"
+
+Whether a library functions are internal or external has important implications. From the [documentation](https://docs.soliditylang.org/en/latest/contracts.html#libraries)
+
+> ... the code of internal library functions that are called from a contract and all functions called from therein will at compile time be included in the calling contract, and a regular JUMP call will be used instead of a DELEGATECALL.
+
+Developers may prefer internal functions because they are more gas efficient to call.
+
+If a function should never be called from another contract, it should be marked private and its name should have a leading underscore.
 
 ### C. Additions
 
