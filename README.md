@@ -110,27 +110,15 @@ function validate(UserOperation calldata userOp) external returns (bytes memory 
 }
 ```
 
-#### 6. Avoid leading verbs in function names.
+#### 6. Prefer composition over inheritence.
 
-NO:
+If a function or set of functions could reasonably be defined as its own contract or as a part of a larger contract, prefer defining as part of larger contract. This makes the code easier to audit?
 
-- getBalanceOf
-- doValidate
-
-YES:
-
-- balanceOf
-- validate
-
-#### 7. Prefer composition over inheritence.
-
-Excessive use of inheritence can make code harder to reason about and audit. When possible, prefer composing logic in a single contract.
-
-#### 8. Avoid writing interfaces.
+#### 7. Avoid writing interfaces.
 
 Interfaces separate NatSpec from contract logic, requiring readers to do more work to understand the code. For this reason, they should be avoided.
 
-#### 9. Avoid unnecessary version Pragma constraints.
+#### 8. Avoid unnecessary version Pragma constraints.
 
 While the main contracts we deploy should specify a single Solidity version, all supporting contracts and libraries should have as open a Pragma as possible. A good rule of thumb is to the next major version. For example
 
@@ -138,27 +126,24 @@ While the main contracts we deploy should specify a single Solidity version, all
 pragma solidity ^0.8.0;
 ```
 
-#### 10. Prefer struct and error defintions in a contract.
+#### 9. Struct and Error Definitions
 
-Defining errors and structs within a contract makes their usage elsewhere easier to follow.
+##### a. Prefer declaring structs and errors within the interface, contract, or library where they are used.
+
+##### b. If a struct or error is used across many files, with no interface, contract, or library reasonably being the "owner," then define them in their own file. Multiple structs and errors can be defined together in one file.
+
+#### 10. Use named imports.
 
 NO:
 
 ```
-error MyEvent();
-
-struct MyStruct {};
-
-contract MyContract {}
+import "contract.sol"
 ```
 
 YES:
 
 ```
-contract MyContract {
-  error MyEvent();
-  struct MyStruct {};
-}
+import {Contract} from "contract.sol"
 ```
 
 ## 2. Development
@@ -190,6 +175,74 @@ If the contract is named after a function, then function name can be omitted.
 ```
 contract TransferFromTest {
   function test_debitsFromAccountBalance() ...
+}
+```
+
+#### 4. Prefer tests that test one thing.
+
+This is generally good practice, but especially so because Forge does not give line numers on assertion failures. This makes it hard to track down what, exactly, failed if a test has many assertions.
+
+NO:
+
+```
+function test_transferFrom_works() {
+  // debits correctly 
+  // credits correctly
+  // emits correctly 
+  // reverts correctly
+}
+```
+
+YES:
+
+```
+function test_transferFrom_debitsFrom() {
+  ...
+}
+
+function test_transferFrom_creditsTo() {  
+  ...
+}
+
+function test_transferFrom_emitsCorrectly() {
+  ...
+}
+
+function test_transferFrom_reverts_whenAmountExceedsBalance() {
+  ...
+}
+```
+
+Note, this does not mean a test should only ever have one assertions. Sometimes having multiple assertions is helpful for certainty on what is being test.
+
+```
+function test_transferFrom_creditsTo() {
+  assertEq(balanceOf(to), 0);
+  ...
+  assertEq(balanceOf(to), amount);
+}
+```
+
+#### 5. Use variables for important values in tests
+
+NO:
+
+```
+function test_transferFrom_creditsTo() {
+  assertEq(balanceOf(to), 0);
+  transferFrom(from, to, 10);
+  assertEq(balanceOf(to), 10);
+}
+```
+
+YES:
+
+```
+function test_transferFrom_creditsTo() {
+  assertEq(balanceOf(to), 0);
+  uint amount = 10;
+  transferFrom(from, to, amount);
+  assertEq(balanceOf(to), amount);
 }
 ```
 
