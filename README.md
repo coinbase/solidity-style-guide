@@ -396,4 +396,8 @@ YES:
 
 #### 4. Author should be Coinbase.
 
-If you using the @author tag, it should be "@author Coinbase" optionally followed by a link to the public Github repository.
+If you using the `@author` tag, it should be 
+```solidity
+/// @author Coinbase"
+```
+Optionally followed by a link to the public Github repository.
