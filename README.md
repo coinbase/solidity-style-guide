@@ -371,6 +371,7 @@ struct Position {
 #### 3. Newlines between tag types.
 
 For easier reading, add a new line between tag types, when multiple are present and there are three or more lines.
+
 NO:
 ```solidity
 /// @notice ...
