@@ -4,11 +4,11 @@ This is a guide for Coinbase engineers developing EVM-based smart contracts. We 
 
 ## Why?
 
-We should be as specific and thorough as possible when defining our style, testing, and development practices. Any time we save not having to debate these things on pull requests is productive time that can go into other discussion and review.
+We should be as specific and thorough as possible when defining our style, testing, and development practices. Any time we save not having to debate these things on pull requests is productive time that can go into other discussion and review. Following the style guide is evidence of care.
 
 ## 1. Style
 
-### A. Unless an exception is specifically noted, we follow the [Solidity Style Guide](https://docs.soliditylang.org/en/latest/style-guide.html).
+### A. Unless an exception or addition is specifically noted, we follow the [Solidity Style Guide](https://docs.soliditylang.org/en/latest/style-guide.html).
 
 ### B. Exceptions
 
@@ -24,18 +24,18 @@ One of the motivations for this rule is that it is a helpful visual clue.
 
 We agree that a leading underscore is a useful visual clue, and this is why we oppose using them for internal library functions that can be called from other contracts. Visually, it looks wrong.
 
-```
+```solidity
 Library._function()
 ```
 
 or
 
-```
+```solidity
 using Library for bytes
 bytes._function()
 ```
 
-Note, we cannot address this by insisting on the use public functions. Whether a library functions are internal or external has important implications. From the [documentation](https://docs.soliditylang.org/en/latest/contracts.html#libraries)
+Note, we cannot remedy this by insisting on the use public functions. Whether a library functions are internal or external has important implications. From the [Solidity documentation](https://docs.soliditylang.org/en/latest/contracts.html#libraries)
 
 > ... the code of internal library functions that are called from a contract and all functions called from therein will at compile time be included in the calling contract, and a regular JUMP call will be used instead of a DELEGATECALL.
 
@@ -112,7 +112,7 @@ function validate(UserOperation calldata userOp) external returns (bytes memory 
 
 #### 6. Prefer composition over inheritence.
 
-If a function or set of functions could reasonably be defined as its own contract or as a part of a larger contract, prefer defining as part of larger contract. This makes the code easier to audit?
+If a function or set of functions could reasonably be defined as its own contract or as a part of a larger contract, prefer defining as part of larger contract. This makes the code easier to understand and audit.
 
 #### 7. Avoid writing interfaces.
 
@@ -128,23 +128,47 @@ pragma solidity ^0.8.0;
 
 #### 9. Struct and Error Definitions
 
-##### a. Prefer declaring structs and errors within the interface, contract, or library where they are used.
+##### A. Prefer declaring structs and errors within the interface, contract, or library where they are used.
 
-##### b. If a struct or error is used across many files, with no interface, contract, or library reasonably being the "owner," then define them in their own file. Multiple structs and errors can be defined together in one file.
+##### B. If a struct or error is used across many files, with no interface, contract, or library reasonably being the "owner," then define them in their own file. Multiple structs and errors can be defined together in one file.
 
 #### 10. Use named imports.
 
+Named imports help readers understand what exactly is being used and where it is originally declared.
+
 NO:
 
-```
-import "contract.sol"
+```solidity
+import "./contract.sol"
 ```
 
 YES:
 
+```solidity
+import {Contract} from "./contract.sol"
 ```
-import {Contract} from "contract.sol"
+
+For convenience, named imports do not have to be used in test files.
+
+#### 11. Commenting to group sections of the code is permitted.
+
+Somtimes authors and readers to find it helpful to comment dividers between groups of functions. This permitted, however ensure the style guide [ordering of functions](https://docs.soliditylang.org/en/latest/style-guide.html#order-of-functions) is still followed.
+
+For example
+
+```solidity
+/// External Functions ///
 ```
+
+```solidity
+/*´:°•.°+.*•´.*:˚.°*.˚•´.°:°•.°•.*•´.*:˚.°*.˚•´.°:°•.°+.*•´.*:*/
+/*                   VALIDATION OPERATIONS                    */
+/*.•°:°.´+˚.*°.˚:*.´•*.+°.•°:´*.´•*.•°.•°:°.´:•˚°.*°.˚:*.´+°.•*/
+```
+
+#### 12. ASCII Art
+
+ASCII art is permitted in the space between the end of the Pragmas and the beginning of the imports.
 
 ## 2. Development
 
@@ -152,11 +176,11 @@ import {Contract} from "contract.sol"
 
 ### B. Testing
 
-#### 1. Test file names should follow Solidity Style Guide conventions and also have `.t` before `.sol`.
+#### 1. Test file names should follow Solidity Style Guide conventions for files names and also have `.t` before `.sol`.
 
 For example, `ERC20.t.sol`
 
-#### 2. Test contract names should follow include the name of the contract or function being tested, followed by "Test".
+#### 2. Test contract names should include the name of the contract or function being tested, followed by "Test".
 
 For example,
 
@@ -172,7 +196,7 @@ For example
 
 If the contract is named after a function, then function name can be omitted.
 
-```
+```solidity
 contract TransferFromTest {
   function test_debitsFromAccountBalance() ...
 }
@@ -184,7 +208,7 @@ This is generally good practice, but especially so because Forge does not give l
 
 NO:
 
-```
+```solidity
 function test_transferFrom_works() {
   // debits correctly 
   // credits correctly
@@ -195,7 +219,7 @@ function test_transferFrom_works() {
 
 YES:
 
-```
+```solidity
 function test_transferFrom_debitsFrom() {
   ...
 }
@@ -215,7 +239,7 @@ function test_transferFrom_reverts_whenAmountExceedsBalance() {
 
 Note, this does not mean a test should only ever have one assertions. Sometimes having multiple assertions is helpful for certainty on what is being test.
 
-```
+```solidity
 function test_transferFrom_creditsTo() {
   assertEq(balanceOf(to), 0);
   ...
@@ -227,7 +251,7 @@ function test_transferFrom_creditsTo() {
 
 NO:
 
-```
+```solidity
 function test_transferFrom_creditsTo() {
   assertEq(balanceOf(to), 0);
   transferFrom(from, to, 10);
@@ -237,7 +261,7 @@ function test_transferFrom_creditsTo() {
 
 YES:
 
-```
+```solidity
 function test_transferFrom_creditsTo() {
   assertEq(balanceOf(to), 0);
   uint amount = 10;
@@ -246,6 +270,75 @@ function test_transferFrom_creditsTo() {
 }
 ```
 
+#### 6. Prefer fuzz tests.
+
+All else being equal, prefer fuzz tests.
+
+NO:
+
+```solidity
+function test_transferFrom_creditsTo() {
+  assertEq(balanceOf(to), 0);
+  uint amount = 10;
+  transferFrom(from, to, amount);
+  assertEq(balanceOf(to), amount);
+}
+```
+
+YES:
+
+```solidity
+function test_transferFrom_creditsTo(uint amount) {
+  assertEq(balanceOf(to), 0);
+  transferFrom(from, to, amount);
+  assertEq(balanceOf(to), amount);
+}
+```
+
 ### C. Upgradability
 
 #### 1. Prefer [ERC-7201](https://eips.ethereum.org/EIPS/eip-7201) "Namespaced Storage Layout" convention to avoid storage collisions.
+
+## 3. NatSpec
+
+### A. Unless exceptions or additions are explicitly noted, follow [Solidity NatSpec](https://docs.soliditylang.org/en/latest/natspec-format.html).
+
+### B. Additions
+
+#### 1. All external functions, events, and errors should have complete NatSpec.
+
+Minimally including `@notice`. `@param` and `@return` should be present if there are parameters or return values.
+
+#### 2. Struct NatSpec
+
+Structs can be documented in the following way with a `@notice` above and, if desired, `@dev` for each field.
+
+```solidity
+/// @notice A struct describing an accounts position
+struct Position {
+  /// @dev The unix timestamp (seconds) of the block when the position was created.
+  uint created;
+  /// @dev The amount of ETH in the position 
+  uint amount;
+}
+```
+
+#### 3. Newlines between tag types.
+
+For easier reading, add a new line between tag types, when multiple are present.
+
+```solidity
+/// @notice ...
+///
+/// @dev ...
+/// @dev ...
+/// 
+/// @param ...
+/// @param ...
+/// 
+/// @return
+```
+
+#### 4. Author should be Coinbase.
+
+If you using the @author tag, it should be "@author Coinbase" optionally followed by a link to the public Github repository.
