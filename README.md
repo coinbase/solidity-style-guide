@@ -6,6 +6,8 @@ This is a guide for Coinbase engineers developing EVM-based smart contracts. We 
 
 We should be as specific and thorough as possible when defining our style, testing, and development practices. Any time we save not having to debate these things on pull requests is productive time that can go into other discussion and review. Following the style guide is evidence of care.
 
+![tom-sachs-gq-style-spring-2019-05](https://github.com/coinbase/solidity-style-guide/assets/6678357/9e904107-e83f-4d89-a405-d3f1394d8de4)
+
 ## 1. Style
 
 ### A. Unless an exception or addition is specifically noted, we follow the [Solidity Style Guide](https://docs.soliditylang.org/en/latest/style-guide.html).
@@ -301,7 +303,7 @@ function test_transferFrom_creditsTo(uint amount) {
 
 ## 3. NatSpec
 
-### A. Unless exceptions or additions are explicitly noted, follow [Solidity NatSpec](https://docs.soliditylang.org/en/latest/natspec-format.html).
+### A. Unless an exception or addition is specifically noted, follow [Solidity NatSpec](https://docs.soliditylang.org/en/latest/natspec-format.html).
 
 ### B. Additions
 
@@ -311,7 +313,7 @@ Minimally including `@notice`. `@param` and `@return` should be present if there
 
 #### 2. Struct NatSpec
 
-Structs can be documented in the following way with a `@notice` above and, if desired, `@dev` for each field.
+Structs can be documented with a `@notice` above and, if desired, `@dev` for each field.
 
 ```solidity
 /// @notice A struct describing an accounts position
