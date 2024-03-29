@@ -165,7 +165,7 @@ YES:
 import {A} from './A.sol'
 import {B} from './B.sol'
 ```
-##### C. Group imports by external and local with a space in between.
+##### C. Group imports by external and local with a new line in between.
 For example
 ```solidity
 import {Math} from '/solady/Math.sol'
