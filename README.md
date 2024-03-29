@@ -134,7 +134,8 @@ pragma solidity ^0.8.0;
 
 ##### B. If a struct or error is used across many files, with no interface, contract, or library reasonably being the "owner," then define them in their own file. Multiple structs and errors can be defined together in one file.
 
-#### 10. Use named imports.
+#### 10. Imports
+##### A. Use named imports.
 
 Named imports help readers understand what exactly is being used and where it is originally declared.
 
@@ -151,6 +152,35 @@ import {Contract} from "./contract.sol"
 ```
 
 For convenience, named imports do not have to be used in test files.
+
+##### B. Order imports alphabetically (A to Z) by file name.
+NO:
+```solidity
+import {B} from './B.sol'
+import {A} from './A.sol'
+```
+YES:
+```solidity
+import {A} from './A.sol'
+import {B} from './B.sol'
+```
+##### C. Group imports by external and local with a space in between.
+For example
+```solidity
+import {Math} from '/solady/Math.sol'
+
+import {MyHelper} from './MyHelper.sol'
+```
+
+In test files, imports from `/test` should be their own group, as well. 
+
+```solidity
+import {Math} from '/solady/Math.sol'
+
+import {MyHelper} from '../src/MyHelper.sol'
+
+import {Mock} from './mocks/Mock.sol'
+```
 
 #### 11. Commenting to group sections of the code is permitted.
 
@@ -296,17 +326,23 @@ function test_transferFrom_creditsTo(uint amount) {
   assertEq(balanceOf(to), amount);
 }
 ```
+### C. Project Setup
+#### 1. Avoid custom remappings. 
+[Remappings](https://book.getfoundry.sh/projects/dependencies?#remapping-dependencies) help Forge find dependencies based on import statements. Forge will automatically deduce some remappings, for example 
+```rust
+forge-std/=lib/forge-std/src/
+solmate/=lib/solmate/src/
+```
+We should avoid adding to these or defining any remappings explicitly, as it makes our project harder for others to use as a dependency. For example, if our project depends on Solmate and so does theirs, we want to avoid our project having some irregular import naming, resolved with a custom remapping, which will conflict with their import naming.
 
-### C. Upgradability
+### D. Upgradability
 
 #### 1. Prefer [ERC-7201](https://eips.ethereum.org/EIPS/eip-7201) "Namespaced Storage Layout" convention to avoid storage collisions.
 
-### D. Structs
+### E. Structs
 #### 1. Where possible, struct values should be packed to minimize SLOADs and SSETs. 
 #### 2. Timestamp fields in a struct should be at least uint32 and ideally be uint40. 
 `uint32` will give the contract ~82 years of validity `(2^32 / (60*60*24*365)) - (2024 - 1970)`. If space allows, uint40 is the preferred size.
-#### 3. A field for ETH value does not need to be larger than uint128.
-There is currently 120 million ETH in circulation and currently issuance is negative. At current prices, uint128 ETH would exceed world GDP. 
 
 ## 3. NatSpec
 
@@ -334,8 +370,18 @@ struct Position {
 
 #### 3. Newlines between tag types.
 
-For easier reading, add a new line between tag types, when multiple are present.
+For easier reading, add a new line between tag types, when multiple are present and there are three or more lines.
+NO:
+```solidity
+/// @notice ...
+/// @dev ...
+/// @dev ...
+/// @param ...
+/// @param ...
+/// @return
+```
 
+YES:
 ```solidity
 /// @notice ...
 ///
