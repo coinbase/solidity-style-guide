@@ -85,7 +85,8 @@ Named return arguments can be helpful in functions with multiple returned values
 function validate(UserOperation calldata userOp) external returns (bytes memory context, uint256 validationData)
 ```
 
-However, it is important to be explicit when returning early.\
+However, it is important to be explicit when returning early.
+
 NO:
 
 ```solidity
