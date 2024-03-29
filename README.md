@@ -398,6 +398,6 @@ YES:
 
 If you using the `@author` tag, it should be 
 ```solidity
-/// @author Coinbase"
+/// @author Coinbase
 ```
 Optionally followed by a link to the public Github repository.
