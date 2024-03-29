@@ -301,6 +301,13 @@ function test_transferFrom_creditsTo(uint amount) {
 
 #### 1. Prefer [ERC-7201](https://eips.ethereum.org/EIPS/eip-7201) "Namespaced Storage Layout" convention to avoid storage collisions.
 
+### D. Structs
+#### 1. Where possible, struct values should be packed to minimize SLOADs and SSETs. 
+#### 2. Timestamp fields in a struct should be at least uint32 and ideally be uint40. 
+`uint32` will give the contract ~82 years of validity `(2^32 / (60*60*24*365)) - (2024 - 1970)`. If space allows, uint40 is the preferred size.
+#### 3. A field for ETH value does not need to be larger than uint128.
+There is currently 120 million ETH in circulation and currently issuance is negative. At current prices, uint128 ETH would exceed world GDP. 
+
 ## 3. NatSpec
 
 ### A. Unless an exception or addition is specifically noted, follow [Solidity NatSpec](https://docs.soliditylang.org/en/latest/natspec-format.html).
