@@ -113,9 +113,11 @@ function validate(UserOperation calldata userOp) external returns (bytes memory 
 }
 ```
 
-#### 6. Prefer composition over inheritence.
+#### 6. Prefer composition over inheritance.
 
 If a function or set of functions could reasonably be defined as its own contract or as a part of a larger contract, prefer defining as part of larger contract. This makes the code easier to understand and audit.
+
+Note this _does not_ mean that we should avoid inheritance, in general. Inheritance is useful at times, most especially when building on existing, trusted contracts. For example, _do not_ reimplement `Ownable` functionality to avoid inheritance. Inherit `Ownable` from a trusted vendor, such as OpenZeppelin or Solady. 
 
 #### 7. Avoid writing interfaces.
 
@@ -185,7 +187,7 @@ import {Mock} from './mocks/Mock.sol'
 
 #### 11. Commenting to group sections of the code is permitted.
 
-Somtimes authors and readers to find it helpful to comment dividers between groups of functions. This permitted, however ensure the style guide [ordering of functions](https://docs.soliditylang.org/en/latest/style-guide.html#order-of-functions) is still followed.
+Sometimes authors and readers to find it helpful to comment dividers between groups of functions. This permitted, however ensure the style guide [ordering of functions](https://docs.soliditylang.org/en/latest/style-guide.html#order-of-functions) is still followed.
 
 For example
 
@@ -237,7 +239,7 @@ contract TransferFromTest {
 
 #### 4. Prefer tests that test one thing.
 
-This is generally good practice, but especially so because Forge does not give line numers on assertion failures. This makes it hard to track down what, exactly, failed if a test has many assertions.
+This is generally good practice, but especially so because Forge does not give line numbers on assertion failures. This makes it hard to track down what, exactly, failed if a test has many assertions.
 
 NO:
 
