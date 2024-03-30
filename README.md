@@ -343,7 +343,7 @@ We should avoid adding to these or defining any remappings explicitly, as it mak
 #### 1. Prefer [ERC-7201](https://eips.ethereum.org/EIPS/eip-7201) "Namespaced Storage Layout" convention to avoid storage collisions.
 
 ### E. Structs
-#### 1. Where possible, struct values should be packed to minimize SLOADs and SSETs. 
+#### 1. Where possible, struct values should be packed to minimize SLOADs and SSTOREs.
 #### 2. Timestamp fields in a struct should be at least uint32 and ideally be uint40. 
 `uint32` will give the contract ~82 years of validity `(2^32 / (60*60*24*365)) - (2024 - 1970)`. If space allows, uint40 is the preferred size.
 
