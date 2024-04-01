@@ -1,6 +1,6 @@
 # Coinbase Solidity Style Guide
 
-This is a guide for Coinbase engineers developing EVM-based smart contracts. We use Solidity when developing such contracts, so we call it a "Solidity Style Guide." This guide also covers development and testing practices. We are sharing this publicly incase it is useful to others.
+This is a guide for Coinbase engineers developing EVM-based smart contracts. We use Solidity when developing such contracts, so we call it a "Solidity Style Guide." This guide also covers development and testing practices. We are sharing this publicly in case it is useful to others.
 
 ## Why?
 
@@ -115,7 +115,7 @@ function validate(UserOperation calldata userOp) external returns (bytes memory 
 
 #### 6. Prefer composition over inheritance.
 
-If a function or set of functions could reasonably be defined as its own contract or as a part of a larger contract, prefer defining as part of larger contract. This makes the code easier to understand and audit.
+If a function or set of functions could reasonably be defined as its own contract or as a part of a larger contract, prefer defining it as part of a larger contract. This makes the code easier to understand and audit.
 
 Note this _does not_ mean that we should avoid inheritance, in general. Inheritance is useful at times, most especially when building on existing, trusted contracts. For example, _do not_ reimplement `Ownable` functionality to avoid inheritance. Inherit `Ownable` from a trusted vendor, such as OpenZeppelin or Solady. 
 
@@ -187,7 +187,7 @@ import {Mock} from './mocks/Mock.sol'
 
 #### 11. Commenting to group sections of the code is permitted.
 
-Sometimes authors and readers to find it helpful to comment dividers between groups of functions. This permitted, however ensure the style guide [ordering of functions](https://docs.soliditylang.org/en/latest/style-guide.html#order-of-functions) is still followed.
+Sometimes authors and readers find it helpful to comment dividers between groups of functions. This permitted, however ensure the style guide [ordering of functions](https://docs.soliditylang.org/en/latest/style-guide.html#order-of-functions) is still followed.
 
 For example
 
@@ -272,7 +272,7 @@ function test_transferFrom_reverts_whenAmountExceedsBalance() {
 }
 ```
 
-Note, this does not mean a test should only ever have one assertions. Sometimes having multiple assertions is helpful for certainty on what is being test.
+Note, this does not mean a test should only ever have one assertion. Sometimes having multiple assertions is helpful for certainty on what is being tested.
 
 ```solidity
 function test_transferFrom_creditsTo() {
