@@ -117,7 +117,7 @@ function validate(UserOperation calldata userOp) external returns (bytes memory 
 
 If a function or set of functions could reasonably be defined as its own contract or as a part of a larger contract, prefer defining it as part of a larger contract. This makes the code easier to understand and audit.
 
-Note this _does not_ mean that we should avoid inheritance, in general. Inheritance is useful at times, most especially when building on existing, trusted contracts. For example, _do not_ reimplement `Ownable` functionality to avoid inheritance. Inherit `Ownable` from a trusted vendor, such as OpenZeppelin or Solady. 
+Note this _does not_ mean that we should avoid inheritance, in general. Inheritance is useful at times, most especially when building on existing, trusted contracts. For example, _do not_ reimplement `Ownable` functionality to avoid inheritance. Inherit `Ownable` from a trusted vendor, such as [OpenZeppelin](https://github.com/OpenZeppelin/openzeppelin-contracts/) or [Solady](https://github.com/Vectorized/solady). 
 
 #### 7. Avoid writing interfaces.
 
