@@ -118,7 +118,7 @@ function validate(UserOperation calldata userOp) external returns (bytes memory 
 
 If a function or set of functions could reasonably be defined as its own contract or as a part of a larger contract, prefer defining it as part of a larger contract. This makes the code easier to understand and audit.
 
-Note this _does not_ mean that we should avoid inheritance, in general. Inheritance is useful at times, most especially when building on existing, trusted contracts. For example, _do not_ reimplement `Ownable` functionality to avoid inheritance. Inherit `Ownable` from a trusted vendor, such as [OpenZeppelin](https://github.com/OpenZeppelin/openzeppelin-contracts/) or [Solady](https://github.com/Vectorized/solady). 
+Note this _does not_ mean that we should avoid inheritance, in general. Inheritance is useful at times, most especially when building on existing, trusted contracts. For example, _do not_ reimplement `Ownable` functionality to avoid inheritance. Inherit `Ownable` from a trusted vendor, such as [OpenZeppelin](https://github.com/OpenZeppelin/openzeppelin-contracts/) or [Solady](https://github.com/Vectorized/solady).
 
 #### 7. Avoid writing interfaces.
 
@@ -139,6 +139,7 @@ pragma solidity ^0.8.0;
 ##### B. If a struct or error is used across many files, with no interface, contract, or library reasonably being the "owner," then define them in their own file. Multiple structs and errors can be defined together in one file.
 
 #### 10. Imports
+
 ##### A. Use named imports.
 
 Named imports help readers understand what exactly is being used and where it is originally declared.
@@ -158,25 +159,32 @@ import {Contract} from "./contract.sol"
 For convenience, named imports do not have to be used in test files.
 
 ##### B. Order imports alphabetically (A to Z) by file name.
+
 NO:
+
 ```solidity
 import {B} from './B.sol'
 import {A} from './A.sol'
 ```
+
 YES:
+
 ```solidity
 import {A} from './A.sol'
 import {B} from './B.sol'
 ```
+
 ##### C. Group imports by external and local with a new line in between.
+
 For example
+
 ```solidity
 import {Math} from '/solady/Math.sol'
 
 import {MyHelper} from './MyHelper.sol'
 ```
 
-In test files, imports from `/test` should be their own group, as well. 
+In test files, imports from `/test` should be their own group, as well.
 
 ```solidity
 import {Math} from '/solady/Math.sol'
@@ -330,13 +338,18 @@ function test_transferFrom_creditsTo(uint amount) {
   assertEq(balanceOf(to), amount);
 }
 ```
+
 ### C. Project Setup
-#### 1. Avoid custom remappings. 
-[Remappings](https://book.getfoundry.sh/projects/dependencies?#remapping-dependencies) help Forge find dependencies based on import statements. Forge will automatically deduce some remappings, for example 
+
+#### 1. Avoid custom remappings.
+
+[Remappings](https://book.getfoundry.sh/projects/dependencies?#remapping-dependencies) help Forge find dependencies based on import statements. Forge will automatically deduce some remappings, for example
+
 ```rust
 forge-std/=lib/forge-std/src/
 solmate/=lib/solmate/src/
 ```
+
 We should avoid adding to these or defining any remappings explicitly, as it makes our project harder for others to use as a dependency. For example, if our project depends on Solmate and so does theirs, we want to avoid our project having some irregular import naming, resolved with a custom remapping, which will conflict with their import naming.
 
 ### D. Upgradability
@@ -344,8 +357,11 @@ We should avoid adding to these or defining any remappings explicitly, as it mak
 #### 1. Prefer [ERC-7201](https://eips.ethereum.org/EIPS/eip-7201) "Namespaced Storage Layout" convention to avoid storage collisions.
 
 ### E. Structs
+
 #### 1. Where possible, struct values should be packed to minimize SLOADs and SSTOREs.
-#### 2. Timestamp fields in a struct should be at least uint32 and ideally be uint40. 
+
+#### 2. Timestamp fields in a struct should be at least uint32 and ideally be uint40.
+
 `uint32` will give the contract ~82 years of validity `(2^32 / (60*60*24*365)) - (2024 - 1970)`. If space allows, uint40 is the preferred size.
 
 ## 3. NatSpec
@@ -377,6 +393,7 @@ struct Position {
 For easier reading, add a new line between tag types, when multiple are present and there are three or more lines.
 
 NO:
+
 ```solidity
 /// @notice ...
 /// @dev ...
@@ -387,6 +404,7 @@ NO:
 ```
 
 YES:
+
 ```solidity
 /// @notice ...
 ///
@@ -401,8 +419,10 @@ YES:
 
 #### 4. Author should be Coinbase.
 
-If you using the `@author` tag, it should be 
+If you using the `@author` tag, it should be
+
 ```solidity
 /// @author Coinbase
 ```
+
 Optionally followed by a link to the public Github repository.
