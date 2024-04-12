@@ -4,6 +4,6 @@
     "format": "dprint fmt"
   },
   "simple-git-hooks": {
-    "pre-commit": "bun run format"
+    "pre-commit": "bun run dprint check"
   }
 }
