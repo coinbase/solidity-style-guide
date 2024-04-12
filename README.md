@@ -213,6 +213,22 @@ For example
 
 ASCII art is permitted in the space between the end of the Pragmas and the beginning of the imports.
 
+#### 13. Prefer named arguments.
+
+Passing arguments to functions, events, and errors with explicit naming is helpful for clarity, especially when the name of the variable passed does not match the parameter name.
+
+NO:
+
+```
+pow(x, y, v)
+```
+
+YES:
+
+```
+pow({base: x, exponent: y, scalar: v)
+```
+
 ## 2. Development
 
 ### A. Use [Forge](https://github.com/foundry-rs/foundry/tree/master/crates/forge) for testing and dependency management.
