@@ -1,3 +1,10 @@
+name: format check
+
+on:
+  pull_request:
+    branches:
+      - main
+
 jobs:
   style:
     runs-on: ubuntu-latest
