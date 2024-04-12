@@ -2,7 +2,8 @@
   "dependencies": { "dprint": "^0.45.0", "simple-git-hooks": "^2.11.0" },
   "scripts": {
     "format": "dprint fmt",
-    "format-check": "dprint check"
+    "format-check": "dprint check",
+    "prepare": "bun x simple-git-hooks"
   },
   "simple-git-hooks": {
     "pre-commit": "bun run format-check"

@@ -8,9 +8,6 @@ We should be as specific and thorough as possible when defining our style, testi
 
 ![tom-sachs-gq-style-spring-2019-05](https://github.com/coinbase/solidity-style-guide/assets/6678357/9e904107-e83f-4d89-a405-d3f1394d8de4)
 
-
-
-
 ## 1. Style
 
 ### A. Unless an exception or addition is specifically noted, we follow the [Solidity Style Guide](https://docs.soliditylang.org/en/latest/style-guide.html).
