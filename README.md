@@ -226,7 +226,7 @@ pow(x, y, v)
 YES:
 
 ```
-pow({base: x, exponent: y, scalar: v)
+pow({base: x, exponent: y, scalar: v})
 ```
 
 ## 2. Development
