@@ -234,8 +234,9 @@ For example,
 
 For example
 
-1. `test_transferFrom_debitsFromAccountBalance`
-2. `test_transferFrom_debitsFromAccountBalance_whenCalledViaPermit`
+- `test_transferFrom_debitsFromAccountBalance`
+- `test_transferFrom_debitsFromAccountBalance_whenCalledViaPermit`
+- `test_transferFrom_reverts_whenAmountExceedsBalance`
 
 If the contract is named after a function, then function name can be omitted.
 
