@@ -119,9 +119,15 @@ If a function or set of functions could reasonably be defined as its own contrac
 
 Note this _does not_ mean that we should avoid inheritance, in general. Inheritance is useful at times, most especially when building on existing, trusted contracts. For example, _do not_ reimplement `Ownable` functionality to avoid inheritance. Inherit `Ownable` from a trusted vendor, such as [OpenZeppelin](https://github.com/OpenZeppelin/openzeppelin-contracts/) or [Solady](https://github.com/Vectorized/solady).
 
-#### 7. Avoid writing interfaces.
+#### 7. Interfaces
 
-Interfaces separate NatSpec from contract logic, requiring readers to do more work to understand the code. For this reason, they should be avoided.
+##### A. Use interfaces over manual abi encodings
+
+When calling external contracts, wrapping an address in an interface to call its functions will provide type-safety and compiler help. Other methods like `abi.encodeWithSelector` or `abi.encodeWithSignature`, while functional, require manual definition without IDE support.
+
+##### B. Write interfaces for contracts expecting calls from other contracts
+
+The convenience of A is only possible when developers write interfaces. Writing and using an interface in your contracts can provide other developers this benefit. If you expect your contract to only be called by end-users or offchain bots, interfaces are less helpful and can even become an impediment by separating NatSpec documentation from contract logic.
 
 #### 8. Avoid unnecessary version Pragma constraints.
 
@@ -270,9 +276,9 @@ NO:
 
 ```solidity
 function test_transferFrom_works() {
-  // debits correctly 
+  // debits correctly
   // credits correctly
-  // emits correctly 
+  // emits correctly
   // reverts correctly
 }
 ```
@@ -284,7 +290,7 @@ function test_transferFrom_debitsFrom() {
   ...
 }
 
-function test_transferFrom_creditsTo() {  
+function test_transferFrom_creditsTo() {
   ...
 }
 
@@ -399,7 +405,7 @@ Structs can be documented with a `@notice` above and, if desired, `@dev` for eac
 struct Position {
   /// @dev The unix timestamp (seconds) of the block when the position was created.
   uint created;
-  /// @dev The amount of ETH in the position 
+  /// @dev The amount of ETH in the position
   uint amount;
 }
 ```
@@ -426,10 +432,10 @@ YES:
 ///
 /// @dev ...
 /// @dev ...
-/// 
+///
 /// @param ...
 /// @param ...
-/// 
+///
 /// @return
 ```
 
