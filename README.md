@@ -242,7 +242,7 @@ mapping(uint256 => mapping(address => uint256)) public balances;
 YES:
 
 ```
-mapping(uint256 balanceKey => mapping(address asset => uint256 amount)) public balances;
+mapping(address account => mapping(address asset => uint256 amount)) public balances;
 ```
 
 ## 2. Development
