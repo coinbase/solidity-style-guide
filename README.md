@@ -59,7 +59,7 @@ For example, `InsufficientBalance`.
 
 For example, `OwnerUpdated` not `UpdateOwner`.
 
-Events should track things that _happened_ and so should be past tense. Using past tense also helps avoid naming collisions with structs or functions. We also recommend following the `WhatAction`(e.g. `OwnerUpdated`) format rather than `ActionWhat` (e.g. `UpdatedOwner`).
+Events should track things that _happened_ and so should be past tense. Using past tense also helps avoid naming collisions with structs or functions. We also recommend following the `SubjectVerb`(e.g. `OwnerUpdated`) format rather than `VerbSubject` (e.g. `UpdatedOwner`).
 
 We are aware this does not follow precedent from early ERCs, like [ERC-20](https://eips.ethereum.org/EIPS/eip-20). However it does align with some more recent high profile Solidity, e.g. [1](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/976a3d53624849ecaef1231019d2052a16a39ce4/contracts/access/Ownable.sol#L33), [2](https://github.com/aave/aave-v3-core/blob/724a9ef43adf139437ba87dcbab63462394d4601/contracts/interfaces/IAaveOracle.sol#L25-L31), [3](https://github.com/ProjectOpenSea/seaport/blob/1d12e33b71b6988cbbe955373ddbc40a87bd5b16/contracts/zones/interfaces/PausableZoneEventsAndErrors.sol#L25-L41).
 
