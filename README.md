@@ -75,7 +75,7 @@ YES:
 event OwnerUpdated(address newOwner);
 ```
 
-##### B. Prefer `SubjectVerb` naming format
+##### B. Prefer `SubjectVerb` naming format.
 
 NO:
 
