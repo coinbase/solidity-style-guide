@@ -229,6 +229,22 @@ YES:
 pow({base: x, exponent: y, scalar: v})
 ```
 
+#### 14. Prefer named parameters in mapping types.
+
+Explicit naming parameters in mapping types is helpful for clarity, especially when nesting is used.
+
+NO:
+
+```
+mapping(uint256 => mapping(address => uint256)) public balances;
+```
+
+YES:
+
+```
+mapping(address account => mapping(address asset => uint256 amount)) public balances;
+```
+
 ## 2. Development
 
 ### A. Use [Forge](https://github.com/foundry-rs/foundry/tree/master/crates/forge) for testing and dependency management.
