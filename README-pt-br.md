@@ -4,7 +4,7 @@ Este é um guia para os engenheiros da Coinbase que desenvolvem contratos inteli
 
 ## Por quê?
 
-Devemos ser extremamente específicos e minuciosos ao definir nosso estilo, testes e práticas de desenvolvimento. Qualquer tempo que economizamos ao não ter que debater essas coisas em solicitações de pull é tempo produtivo que pode ser dedicado a outras discussões e revisões. Seguir o guia de estilo é evidência de cuidado.
+Devemos ser extremamente específicos e minuciosos ao definir nosso estilo, testes e práticas de desenvolvimento. O tempo que economizamos ao não precisar debater essas questões em pull requests é tempo produtivo que pode ser investido em outras discussões e revisões. Seguir o guia de estilo é uma prova de cuidado.
 
 ![tom-sachs-gq-style-spring-2019-05](https://github.com/coinbase/solidity-style-guide/assets/6678357/9e904107-e83f-4d89-a405-d3f1394d8de4)
 
