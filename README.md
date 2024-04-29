@@ -16,34 +16,36 @@ We should be as specific and thorough as possible when defining our style, testi
 
 #### 1. Names of internal functions in a library should not have an underscore prefix.
 
-The style guide states
+YES:
 
-> Underscore Prefix for Non-external Functions and Variables
+```solidity
+Library.function()
+```
 
-One of the motivations for this rule is that it is a helpful visual clue.
+NO:
+
+```solidity
+Library._function()
+```
+
+If a function should never be called from another contract, it should be marked private and its name should have a leading underscore.
+
+#### Justification
+
+The style guide states `Underscore Prefix for Non-external Functions and Variables`. One motivation for this rule is providing a helpful visual clue:
 
 > Leading underscores allow you to immediately recognize the intent of such functions...
 
 We agree that a leading underscore is a useful visual clue, and this is why we oppose using them for internal library functions that can be called from other contracts. Visually, it looks wrong.
 
 ```solidity
-Library._function()
-```
-
-or
-
-```solidity
 using Library for bytes
 bytes._function()
 ```
 
-Note, we cannot remedy this by insisting on the use public functions. Whether a library functions are internal or external has important implications. From the [Solidity documentation](https://docs.soliditylang.org/en/latest/contracts.html#libraries)
+We could remedy this by insisting on the use public functions. However, developers may prefer internal functions because they are more gas efficient to call, due to how libraries are compiled in Solidity:
 
-> ... the code of internal library functions that are called from a contract and all functions called from therein will at compile time be included in the calling contract, and a regular JUMP call will be used instead of a DELEGATECALL.
-
-Developers may prefer internal functions because they are more gas efficient to call.
-
-If a function should never be called from another contract, it should be marked private and its name should have a leading underscore.
+> ... the code of internal library functions that are called from a contract and all functions called from therein will at compile time be included in the calling contract, and a regular JUMP call will be used instead of a DELEGATECALL. ([source](https://docs.soliditylang.org/en/latest/contracts.html#libraries))
 
 ### C. Additions
 
@@ -51,7 +53,7 @@ If a function should never be called from another contract, it should be marked 
 
 ##### A. Prefer custom errors.
 
-Custom errors are in some cases more gas efficient and allow passing useful information.
+Custom errors should be used wherever possible (an exception could be introducing inconsistencies to existing code bases) - they allow for passing of useful information and are in some cases more gas efficient.
 
 ##### B. Custom error names should be CapWords style.
 
@@ -190,7 +192,7 @@ Assembly code is hard to read and audit. We should avoid it unless the gas savin
 
 ##### A. Avoid unnecessary version Pragma constraints.
 
-While the main contracts we deploy should specify a single Solidity version, all supporting contracts and libraries should have as open a Pragma as possible. A good rule of thumb is to the next major version. For example
+While the main contracts we deploy should specify a single Solidity version, all supporting contracts and libraries should have as open a Pragma as possible. A good rule of thumb is to use the next major version. For example
 
 ```solidity
 pragma solidity ^0.8.0;
@@ -198,9 +200,9 @@ pragma solidity ^0.8.0;
 
 #### 5. Struct and Error Definitions
 
-##### A. Prefer declaring structs and errors within the interface, contract, or library where they are used.
+This helps with clarity.
 
-##### B. If a struct or error is used across many files, with no interface, contract, or library reasonably being the "owner," then define them in their own file. Multiple structs and errors can be defined together in one file.
+However, if a struct or error is used across many files, with no interface, contract, or library reasonably being the "owner," then define them in their own file. Multiple structs and errors can be defined together in one file.
 
 #### 6. Imports
 
@@ -313,7 +315,7 @@ contract TransferFromTest {
 }
 ```
 
-#### 4. Prefer tests that test one thing.
+#### 4. Write tests that test one thing.
 
 This is generally good practice, but especially so because Forge does not give line numbers on assertion failures. This makes it hard to track down what, exactly, failed if a test has many assertions.
 
@@ -421,7 +423,7 @@ We should avoid adding to these or defining any remappings explicitly, as it mak
 
 ### D. Upgradability
 
-#### 1. Prefer [ERC-7201](https://eips.ethereum.org/EIPS/eip-7201) "Namespaced Storage Layout" convention to avoid storage collisions.
+#### 1. Use [ERC-7201](https://eips.ethereum.org/EIPS/eip-7201) "Namespaced Storage Layout" convention to avoid storage collisions.
 
 ### E. Structs
 
