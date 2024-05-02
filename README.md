@@ -65,30 +65,30 @@ Events should track things that _happened_ and so should be past tense. Using pa
 
 We are aware this does not follow precedent from early ERCs, like [ERC-20](https://eips.ethereum.org/EIPS/eip-20). However it does align with some more recent high profile Solidity, e.g. [1](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/976a3d53624849ecaef1231019d2052a16a39ce4/contracts/access/Ownable.sol#L33), [2](https://github.com/aave/aave-v3-core/blob/724a9ef43adf139437ba87dcbab63462394d4601/contracts/interfaces/IAaveOracle.sol#L25-L31), [3](https://github.com/ProjectOpenSea/seaport/blob/1d12e33b71b6988cbbe955373ddbc40a87bd5b16/contracts/zones/interfaces/PausableZoneEventsAndErrors.sol#L25-L41).
 
+YES:
+
+```solidity
+event OwnerUpdated(address newOwner);
+```
+
 NO:
 
 ```solidity
 event OwnerUpdate(address newOwner);
 ```
 
+##### B. Prefer `SubjectVerb` naming format.
+
 YES:
 
 ```solidity
 event OwnerUpdated(address newOwner);
 ```
-
-##### B. Prefer `SubjectVerb` naming format.
 
 NO:
 
 ```solidity
 event UpdatedOwner(address newOwner);
-```
-
-YES:
-
-```solidity
-event OwnerUpdated(address newOwner);
 ```
 
 #### 3. Named arguments and parameters
@@ -113,19 +113,6 @@ function validate(UserOperation calldata userOp) external returns (bytes memory 
 
 However, it is important to be explicit when returning early.
 
-NO:
-
-```solidity
-function validate(UserOperation calldata userOp) external returns (bytes memory context, uint256 validationData) {
-  context = "";
-  validationData = 1;
-
-  if (condition) {
-    return;
-  }
-}
-```
-
 YES:
 
 ```solidity
@@ -139,15 +126,21 @@ function validate(UserOperation calldata userOp) external returns (bytes memory 
 }
 ```
 
+NO:
+
+```solidity
+function validate(UserOperation calldata userOp) external returns (bytes memory context, uint256 validationData) {
+  context = "";
+  validationData = 1;
+  if (condition) {
+    return;
+  }
+}
+```
+
 ##### B. Prefer named arguments.
 
 Passing arguments to functions, events, and errors with explicit naming is helpful for clarity, especially when the name of the variable passed does not match the parameter name.
-
-NO:
-
-```
-pow(x, y, v)
-```
 
 YES:
 
@@ -155,20 +148,26 @@ YES:
 pow({base: x, exponent: y, scalar: v})
 ```
 
-##### C. Prefer named parameters in mapping types.
-
-Explicit naming parameters in mapping types is helpful for clarity, especially when nesting is used.
-
 NO:
 
 ```
-mapping(uint256 => mapping(address => uint256)) public balances;
+pow(x, y, v)
 ```
+
+##### C. Prefer named parameters in mapping types.
+
+Explicit naming parameters in mapping types is helpful for clarity, especially when nesting is used.
 
 YES:
 
 ```
 mapping(address account => mapping(address asset => uint256 amount)) public balances;
+```
+
+NO:
+
+```
+mapping(uint256 => mapping(address => uint256)) public balances;
 ```
 
 #### 4. Structure of a Contract
@@ -209,34 +208,34 @@ pragma solidity ^0.8.0;
 
 Named imports help readers understand what exactly is being used and where it is originally declared.
 
-NO:
-
-```solidity
-import "./contract.sol"
-```
-
 YES:
 
 ```solidity
 import {Contract} from "./contract.sol"
 ```
 
-For convenience, named imports do not have to be used in test files.
-
-##### B. Order imports alphabetically (A to Z) by file name.
-
 NO:
 
 ```solidity
-import {B} from './B.sol'
-import {A} from './A.sol'
+import "./contract.sol"
 ```
+
+For convenience, named imports do not have to be used in test files.
+
+##### B. Order imports alphabetically (A to Z) by file name.
 
 YES:
 
 ```solidity
 import {A} from './A.sol'
 import {B} from './B.sol'
+```
+
+NO:
+
+```solidity
+import {B} from './B.sol'
+import {A} from './A.sol'
 ```
 
 ##### C. Group imports by external and local with a new line in between.
@@ -318,17 +317,6 @@ contract TransferFromTest {
 
 This is generally good practice, but especially so because Forge does not give line numbers on assertion failures. This makes it hard to track down what, exactly, failed if a test has many assertions.
 
-NO:
-
-```solidity
-function test_transferFrom_works() {
-  // debits correctly 
-  // credits correctly
-  // emits correctly 
-  // reverts correctly
-}
-```
-
 YES:
 
 ```solidity
@@ -349,6 +337,17 @@ function test_transferFrom_reverts_whenAmountExceedsBalance() {
 }
 ```
 
+NO:
+
+```solidity
+function test_transferFrom_works() {
+  // debits correctly
+  // credits correctly
+  // emits correctly
+  // reverts correctly
+}
+```
+
 Note, this does not mean a test should only ever have one assertion. Sometimes having multiple assertions is helpful for certainty on what is being tested.
 
 ```solidity
@@ -361,6 +360,17 @@ function test_transferFrom_creditsTo() {
 
 #### 5. Use variables for important values in tests
 
+YES:
+
+```solidity
+function test_transferFrom_creditsTo() {
+  assertEq(balanceOf(to), 0);
+  uint amount = 10;
+  transferFrom(from, to, amount);
+  assertEq(balanceOf(to), amount);
+}
+```
+
 NO:
 
 ```solidity
@@ -371,20 +381,19 @@ function test_transferFrom_creditsTo() {
 }
 ```
 
+#### 6. Prefer fuzz tests.
+
+All else being equal, prefer fuzz tests.
+
 YES:
 
 ```solidity
-function test_transferFrom_creditsTo() {
+function test_transferFrom_creditsTo(uint amount) {
   assertEq(balanceOf(to), 0);
-  uint amount = 10;
   transferFrom(from, to, amount);
   assertEq(balanceOf(to), amount);
 }
 ```
-
-#### 6. Prefer fuzz tests.
-
-All else being equal, prefer fuzz tests.
 
 NO:
 
@@ -392,16 +401,6 @@ NO:
 function test_transferFrom_creditsTo() {
   assertEq(balanceOf(to), 0);
   uint amount = 10;
-  transferFrom(from, to, amount);
-  assertEq(balanceOf(to), amount);
-}
-```
-
-YES:
-
-```solidity
-function test_transferFrom_creditsTo(uint amount) {
-  assertEq(balanceOf(to), 0);
   transferFrom(from, to, amount);
   assertEq(balanceOf(to), amount);
 }
@@ -460,17 +459,6 @@ struct Position {
 
 For easier reading, add a new line between tag types, when multiple are present and there are three or more lines.
 
-NO:
-
-```solidity
-/// @notice ...
-/// @dev ...
-/// @dev ...
-/// @param ...
-/// @param ...
-/// @return
-```
-
 YES:
 
 ```solidity
@@ -482,6 +470,17 @@ YES:
 /// @param ...
 /// @param ...
 /// 
+/// @return
+```
+
+NO:
+
+```solidity
+/// @notice ...
+/// @dev ...
+/// @dev ...
+/// @param ...
+/// @param ...
 /// @return
 ```
 
