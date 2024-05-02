@@ -43,7 +43,7 @@ using Library for bytes
 bytes._function()
 ```
 
-We could remedy this by insisting on the use public functions. However, developers may prefer internal functions because they are more gas efficient to call, due to how libraries are compiled in Solidity:
+Insisting on the use public functions could avoid this issue. However, we should not rely on this as a remedy as developers may prefer internal functions because they are more gas efficient to call, due to how libraries are compiled in Solidity:
 
 > ... the code of internal library functions that are called from a contract and all functions called from therein will at compile time be included in the calling contract, and a regular JUMP call will be used instead of a DELEGATECALL. ([source](https://docs.soliditylang.org/en/latest/contracts.html#libraries))
 
@@ -200,9 +200,9 @@ pragma solidity ^0.8.0;
 
 #### 5. Struct and Error Definitions
 
-This helps with clarity.
+##### A. Prefer declaring structs and errors within the interface, contract, or library where they are used.
 
-However, if a struct or error is used across many files, with no interface, contract, or library reasonably being the "owner," then define them in their own file. Multiple structs and errors can be defined together in one file.
+##### B. If a struct or error is used across many files, with no interface, contract, or library reasonably being the "owner," then define them in their own file. Multiple structs and errors can be defined together in one file.
 
 #### 6. Imports
 
