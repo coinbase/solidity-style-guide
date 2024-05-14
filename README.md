@@ -47,15 +47,17 @@ If a function should never be called from another contract, it should be marked 
 
 ### C. Additions
 
-#### 1. Prefer custom errors.
+#### 1. Errors
+
+##### A. Prefer custom errors.
 
 Custom errors are in some cases more gas efficient and allow passing useful information.
 
-#### 2. Custom error names should be CapWords style.
+##### B. Custom error names should be CapWords style.
 
 For example, `InsufficientBalance`.
 
-#### 3. Events
+#### 2. Events
 
 ##### A. Events names should be past tense.
 
@@ -89,11 +91,9 @@ YES:
 event OwnerUpdated(address newOwner);
 ```
 
-#### 4. Avoid using assembly.
+#### 3. Named arguments and parameters
 
-Assembly code is hard to read and audit. We should avoid it unless the gas savings are very consequential, e.g. > 25%.
-
-#### 5. Avoid unnecessary named return arguments.
+##### A. Avoid unnecessary named return arguments.
 
 In short functions, named return arguments are unnecessary.
 
@@ -139,17 +139,57 @@ function validate(UserOperation calldata userOp) external returns (bytes memory 
 }
 ```
 
-#### 6. Prefer composition over inheritance.
+##### B. Prefer named arguments.
+
+Passing arguments to functions, events, and errors with explicit naming is helpful for clarity, especially when the name of the variable passed does not match the parameter name.
+
+NO:
+
+```
+pow(x, y, v)
+```
+
+YES:
+
+```
+pow({base: x, exponent: y, scalar: v})
+```
+
+##### C. Prefer named parameters in mapping types.
+
+Explicit naming parameters in mapping types is helpful for clarity, especially when nesting is used.
+
+NO:
+
+```
+mapping(uint256 => mapping(address => uint256)) public balances;
+```
+
+YES:
+
+```
+mapping(address account => mapping(address asset => uint256 amount)) public balances;
+```
+
+#### 4. Structure of a Contract
+
+##### A. Prefer composition over inheritance.
 
 If a function or set of functions could reasonably be defined as its own contract or as a part of a larger contract, prefer defining it as part of a larger contract. This makes the code easier to understand and audit.
 
 Note this _does not_ mean that we should avoid inheritance, in general. Inheritance is useful at times, most especially when building on existing, trusted contracts. For example, _do not_ reimplement `Ownable` functionality to avoid inheritance. Inherit `Ownable` from a trusted vendor, such as [OpenZeppelin](https://github.com/OpenZeppelin/openzeppelin-contracts/) or [Solady](https://github.com/Vectorized/solady).
 
-#### 7. Avoid writing interfaces.
+##### B. Avoid writing interfaces.
 
 Interfaces separate NatSpec from contract logic, requiring readers to do more work to understand the code. For this reason, they should be avoided.
 
-#### 8. Avoid unnecessary version Pragma constraints.
+##### C. Avoid using assembly.
+
+Assembly code is hard to read and audit. We should avoid it unless the gas savings are very consequential, e.g. > 25%.
+
+#### 4. Versioning
+
+##### A. Avoid unnecessary version Pragma constraints.
 
 While the main contracts we deploy should specify a single Solidity version, all supporting contracts and libraries should have as open a Pragma as possible. A good rule of thumb is to the next major version. For example
 
@@ -157,13 +197,13 @@ While the main contracts we deploy should specify a single Solidity version, all
 pragma solidity ^0.8.0;
 ```
 
-#### 9. Struct and Error Definitions
+#### 5. Struct and Error Definitions
 
 ##### A. Prefer declaring structs and errors within the interface, contract, or library where they are used.
 
 ##### B. If a struct or error is used across many files, with no interface, contract, or library reasonably being the "owner," then define them in their own file. Multiple structs and errors can be defined together in one file.
 
-#### 10. Imports
+#### 6. Imports
 
 ##### A. Use named imports.
 
@@ -219,7 +259,9 @@ import {MyHelper} from '../src/MyHelper.sol'
 import {Mock} from './mocks/Mock.sol'
 ```
 
-#### 11. Commenting to group sections of the code is permitted.
+#### 7. Comments
+
+##### A. Commenting to group sections of the code is permitted.
 
 Sometimes authors and readers find it helpful to comment dividers between groups of functions. This permitted, however ensure the style guide [ordering of functions](https://docs.soliditylang.org/en/latest/style-guide.html#order-of-functions) is still followed.
 
@@ -235,41 +277,9 @@ For example
 /*.•°:°.´+˚.*°.˚:*.´•*.+°.•°:´*.´•*.•°.•°:°.´:•˚°.*°.˚:*.´+°.•*/
 ```
 
-#### 12. ASCII Art
+##### B. ASCII Art
 
 ASCII art is permitted in the space between the end of the Pragmas and the beginning of the imports.
-
-#### 13. Prefer named arguments.
-
-Passing arguments to functions, events, and errors with explicit naming is helpful for clarity, especially when the name of the variable passed does not match the parameter name.
-
-NO:
-
-```
-pow(x, y, v)
-```
-
-YES:
-
-```
-pow({base: x, exponent: y, scalar: v})
-```
-
-#### 14. Prefer named parameters in mapping types.
-
-Explicit naming parameters in mapping types is helpful for clarity, especially when nesting is used.
-
-NO:
-
-```
-mapping(uint256 => mapping(address => uint256)) public balances;
-```
-
-YES:
-
-```
-mapping(address account => mapping(address asset => uint256 amount)) public balances;
-```
 
 ## 2. Development
 
