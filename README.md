@@ -49,11 +49,67 @@ If a function should never be called from another contract, it should be marked 
 
 #### 1. Errors
 
-##### A. Prefer custom errors.
+##### A. Using Custom Errors Over Require
 
-Custom errors are in some cases more gas efficient and allow passing useful information.
+Utilize custom errors instead of `require` statements for clearer and more gas-efficient error handling. Solidity 0.8.26 supports the use of custom errors with `require`.
 
-##### B. Custom error names should be CapWords style.
+```solidity
+error InsufficientFunds(uint256 requested, uint256 available);
+
+function withdraw(uint256 amount) public {
+    if (amount > balance) {
+        revert InsufficientFunds(amount, balance);
+    }
+    balance -= amount;
+}
+```
+
+> [!TIP]
+> 💡 Custom errors save gas and provide more detailed error messages compared to traditional `require` strings.
+
+##### B. Require with Custom Error (Solidity 0.8.26+)
+
+Use the new `require(condition, error)` syntax to include custom errors in `require` statements, available in Solidity 0.8.26 and later.
+
+```solidity
+error InsufficientFunds(uint256 requested, uint256 available);
+
+function withdraw(uint256 amount) public {
+    require(amount <= balance, InsufficientFunds(amount, balance));
+    balance -= amount;
+}
+```
+
+> [!IMPORTANT]
+> This new syntax provides a more efficient way to handle errors directly within `require` statements, enhancing both readability and gas efficiency.
+
+##### C. Limit Require Messages
+
+Prefer using custom errors over `require` with strings for better efficiency. If you must use `require` with a string message, keep it under 32 bytes to reduce gas costs.
+
+> [!IMPORTANT]
+> Custom errors are more gas-efficient and provide clearer error handling. Whenever possible, use them instead of `require` with a string message.
+
+**Yes:**
+
+```solidity
+require(balance >= amount, "Insufficient funds");
+```
+
+> [!CAUTION]
+> Keeping `require` messages concise (under 32 bytes) minimizes additional gas costs and improves efficiency.
+
+**No:**
+
+```solidity
+require(balance >= amount, "The balance is insufficient for the withdrawal amount requested.");
+```
+
+> [!WARNING]
+> Longer messages significantly increase gas costs. Avoid using verbose messages in `require` statements.
+
+
+##### D. Custom error names should be CapWords style.
 
 For example, `InsufficientBalance`.
 
