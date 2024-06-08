@@ -184,7 +184,16 @@ Interfaces separate NatSpec from contract logic, requiring readers to do more wo
 
 ##### C. Avoid using assembly.
 
-Assembly code is hard to read and audit. We should avoid it unless the gas savings are very consequential, e.g. > 25%.
+Use inline assembly with extreme care. Ensure that it is well-documented with inline comments explaining what the assembly code does. Avoid using assembly unless it adds significant value (e.g., gas savings > 25%) and there are no better alternatives.
+
+```solidity
+function add(uint x, uint y) public pure returns (uint result) {
+    assembly {
+        // Add x and y and store the result in the `result` variable
+        result := add(x, y)
+    }
+}
+```
 
 #### 4. Versioning
 
