@@ -186,8 +186,6 @@ Interfaces separate NatSpec from contract logic, requiring readers to do more wo
 
 Use inline assembly with extreme care. Ensure that it is well-documented with inline comments explaining what the assembly code does. Avoid using assembly unless it adds significant value (e.g., gas savings > 25%) and there are no better alternatives.
 
-**Example:**
-
 ```solidity
 function add(uint x, uint y) public pure returns (uint result) {
     assembly {
