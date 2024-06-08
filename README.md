@@ -93,50 +93,31 @@ event UpdatedOwner(address newOwner);
 
 #### 3. Named arguments and parameters
 
-##### A. Avoid unnecessary named return arguments.
+##### A. Prefer Named Return
 
-In short functions, named return arguments are unnecessary.
+Use named return arguments for gas efficiency and clarity, especially in functions with multiple return values.
 
-NO:
+**Yes:**
 
 ```solidity
-function add(uint a, uint b) public returns (uint result) {
-  result = a + b;
+function calculate(uint256 a, uint256 b) public pure returns (uint256 sum, uint256 product) {
+    sum = a + b;
+    product = a * b;
 }
 ```
 
-Named return arguments can be helpful in functions with multiple returned values.
+**No:**
 
 ```solidity
-function validate(UserOperation calldata userOp) external returns (bytes memory context, uint256 validationData)
-```
-
-However, it is important to be explicit when returning early.
-
-YES:
-
-```solidity
-function validate(UserOperation calldata userOp) external returns (bytes memory context, uint256 validationData) {
-  context = "";
-  validationData = 1;
-
-  if (condition) {
-    return (context, validationData);
-  }
+function calculate(uint256 a, uint256 b) public pure returns (uint256, uint256) {
+    uint256 sum = a + b;
+    uint256 product = a * b;
+    return (sum, product);
 }
 ```
 
-NO:
-
-```solidity
-function validate(UserOperation calldata userOp) external returns (bytes memory context, uint256 validationData) {
-  context = "";
-  validationData = 1;
-  if (condition) {
-    return;
-  }
-}
-```
+> [!TIP]
+> Named return variables save gas by avoiding redundant return statements and making the code more readable.
 
 ##### B. Prefer named arguments.
 
