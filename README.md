@@ -50,8 +50,9 @@ If a function should never be called from another contract, it should be marked 
 #### 1. Errors
 
 ##### A. Using Custom Errors Over Require
+Custom errors are more gas-efficient and provide clearer error handling. Whenever possible, use them instead of `require` with a string message.
 
-Utilize custom errors for clearer and more gas-efficient error handling.
+Yes:
 
 ```solidity
 error InsufficientFunds(uint256 requested, uint256 available);
@@ -64,11 +65,6 @@ function withdraw(uint256 amount) public {
 }
 ```
 
-> [!TIP]
-> 💡 Custom errors save gas and provide more detailed error messages compared to traditional `require` strings.
-
-##### B. Require with Custom Error (Solidity 0.8.26+)
-
 Use the new `require(condition, error)` syntax to include custom errors in `require` statements, available in Solidity 0.8.26 and later.
 
 ```solidity
@@ -80,36 +76,15 @@ function withdraw(uint256 amount) public {
 }
 ```
 
-> [!IMPORTANT]
-> This new syntax provides a more efficient way to handle errors directly within `require` statements, enhancing both readability and gas efficiency.
-
-##### C. Limit Require Messages
-
-Prefer using custom errors over `require` with strings for better efficiency. If you must use `require` with a string message, keep it under 32 bytes to reduce gas costs.
-
-> [!IMPORTANT]
-> Custom errors are more gas-efficient and provide clearer error handling. Whenever possible, use them instead of `require` with a string message.
-
-**Yes:**
+No:
 
 ```solidity
 require(balance >= amount, "Insufficient funds");
 ```
 
-> [!CAUTION]
-> Keeping `require` messages concise (under 32 bytes) minimizes additional gas costs and improves efficiency.
+Prefer using custom errors over `require` with strings for better efficiency. If you must use `require` with a string message, keep it under 32 bytes to reduce gas costs.
 
-**No:**
-
-```solidity
-require(balance >= amount, "The balance is insufficient for the withdrawal amount requested.");
-```
-
-> [!WARNING]
-> Longer messages significantly increase gas costs. Avoid using verbose messages in `require` statements.
-
-
-##### D. Custom error names should be CapWords style.
+##### B. Custom error names should be CapWords style.
 
 For example, `InsufficientBalance`.
 
