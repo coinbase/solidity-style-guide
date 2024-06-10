@@ -51,7 +51,7 @@ If a function should never be called from another contract, it should be marked 
 
 ##### A. Using Custom Errors Over Require
 
-Utilize custom errors instead of `require` statements for clearer and more gas-efficient error handling. Solidity 0.8.26 supports the use of custom errors with `require`.
+Utilize custom errors for clearer and more gas-efficient error handling.
 
 ```solidity
 error InsufficientFunds(uint256 requested, uint256 available);
