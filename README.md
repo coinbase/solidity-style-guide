@@ -52,7 +52,7 @@ If a function should never be called from another contract, it should be marked 
 ##### A. Using Custom Errors Over Require
 Custom errors are more gas-efficient and provide clearer error handling. Whenever possible, use them instead of `require` with a string message.
 
-Yes:
+YES:
 
 ```solidity
 error InsufficientFunds(uint256 requested, uint256 available);
@@ -76,7 +76,7 @@ function withdraw(uint256 amount) public {
 }
 ```
 
-No:
+NO:
 
 ```solidity
 require(balance >= amount, "Insufficient funds");
