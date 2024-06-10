@@ -49,9 +49,40 @@ If a function should never be called from another contract, it should be marked 
 
 #### 1. Errors
 
-##### A. Prefer custom errors.
+##### A. Using Custom Errors Over Require
+Custom errors are more gas-efficient and provide clearer error handling. Whenever possible, use them instead of `require` with a string message.
 
-Custom errors are in some cases more gas efficient and allow passing useful information.
+YES:
+
+```solidity
+error InsufficientFunds(uint256 requested, uint256 available);
+
+function withdraw(uint256 amount) public {
+    if (amount > balance) {
+        revert InsufficientFunds(amount, balance);
+    }
+    balance -= amount;
+}
+```
+
+Use the new `require(condition, error)` syntax to include custom errors in `require` statements, available in Solidity 0.8.26 and later.
+
+```solidity
+error InsufficientFunds(uint256 requested, uint256 available);
+
+function withdraw(uint256 amount) public {
+    require(amount <= balance, InsufficientFunds(amount, balance));
+    balance -= amount;
+}
+```
+
+NO:
+
+```solidity
+require(balance >= amount, "Insufficient funds");
+```
+
+Prefer using custom errors over `require` with strings for better efficiency. If you must use `require` with a string message, keep it under 32 bytes to reduce gas costs.
 
 ##### B. Custom error names should be CapWords style.
 
