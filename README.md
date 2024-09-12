@@ -91,6 +91,22 @@ NO:
 event UpdatedOwner(address newOwner);
 ```
 
+##### C. Events logging updated values should follow the convention: `previous, new`
+
+When choosing to log both the previous and new values, the previous value should be placed before the new value.
+
+YES:
+
+```solidity
+event OwnerUpdated(address previousOwner, address newOwner);
+```
+
+NO:
+
+```solidity
+event OwnerUpdated(address newOwner, address previousOwner);
+```
+
 #### 3. Named arguments and parameters
 
 ##### A. Avoid unnecessary named return arguments.
