@@ -260,25 +260,19 @@ import {Mock} from './mocks/Mock.sol'
 
 #### 7. Comments
 
-##### A. Commenting to group sections of the code is permitted.
+##### A. Limit NatSpec to `external` and `public` functions and events.
 
-Sometimes authors and readers find it helpful to comment dividers between groups of functions. This permitted, however ensure the style guide [ordering of functions](https://docs.soliditylang.org/en/latest/style-guide.html#order-of-functions) is still followed.
+Document what callers and integrators need to know. For a compiler-generated getter, write NatSpec on the `public` state variable that generates it. Do not add NatSpec to other declarations or write other comments, except for the tool directives below. Use descriptive names and split up functions when their logic is hard to follow.
 
-For example
+A comment can fall out of date when the code changes and mislead both people and coding agents.
 
-```solidity
-/// External Functions ///
-```
+##### B. Keep machine-readable directives.
 
-```solidity
-/*´:°•.°+.*•´.*:˚.°*.˚•´.°:°•.°•.*•´.*:˚.°*.˚•´.°:°•.°+.*•´.*:*/
-/*                   VALIDATION OPERATIONS                    */
-/*.•°:°.´+˚.*°.˚:*.´•*.+°.•°:´*.´•*.•°.•°:°.´:•˚°.*°.˚:*.´+°.•*/
-```
+Allow directives wherever tools need them, including on declarations that otherwise do not have NatSpec. Examples include `SPDX-License-Identifier`, `@custom:storage-location`, `forge-lint: disable-next-line`, and `slither-disable-next-line`.
 
-##### B. ASCII Art
+##### C. Do not use section dividers or ASCII art.
 
-ASCII art is permitted in the space between the end of the Pragmas and the beginning of the imports.
+Follow the [ordering of functions](https://docs.soliditylang.org/en/latest/style-guide.html#order-of-functions) so that the structure of a contract is clear without divider comments.
 
 ## 2. Development
 
@@ -437,23 +431,17 @@ We should avoid adding to these or defining any remappings explicitly, as it mak
 
 ### B. Additions
 
-#### 1. All external functions, events, and errors should have complete NatSpec.
+#### 1. Write complete NatSpec for every `external` or `public` function and every event.
 
-Minimally including `@notice`. `@param` and `@return` should be present if there are parameters or return values.
+Include `@notice`, `@param` for each named input, and `@return` for each return value. Describe intentionally unnamed inputs by position in `@dev`. Document the behavior and invariants that callers rely on.
 
-#### 2. Struct NatSpec
+For functions and getters, list `@return` tags in output order. Start each tag with the output name if it has one, even for a single output (for example, `@return amount The recorded balance.`). For an unnamed output, write only the description.
 
-Structs can be documented with a `@notice` above and, if desired, `@dev` for each field.
+For compiler-generated getters, put `@notice` and `@return` on the `public` state variable. Describe getter inputs, such as mapping keys, in `@dev`. Solidity does not accept `@param` on state variable declarations.
 
-```solidity
-/// @notice A struct describing an accounts position
-struct Position {
-  /// @dev The unix timestamp (seconds) of the block when the position was created.
-  uint created;
-  /// @dev The amount of ETH in the position 
-  uint amount;
-}
-```
+#### 2. Do not use `@inheritdoc`.
+
+Write NatSpec at each implementation so readers can see its behavior, access restrictions, and side effects without opening another file.
 
 #### 3. Newlines between tag types.
 
@@ -483,13 +471,3 @@ NO:
 /// @param ...
 /// @return
 ```
-
-#### 4. Author should be Coinbase.
-
-If you using the `@author` tag, it should be
-
-```solidity
-/// @author Coinbase
-```
-
-Optionally followed by a link to the public Github repository.
