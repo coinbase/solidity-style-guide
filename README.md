@@ -262,7 +262,7 @@ import {Mock} from './mocks/Mock.sol'
 
 ##### A. Limit NatSpec to `external` and `public` functions and events.
 
-Document what callers and integrators need to know. Do not add NatSpec to other declarations or write other comments, except for the tool directives below. Use descriptive names and split up functions when their logic is hard to follow.
+Document what callers and integrators need to know. For a compiler-generated getter, write NatSpec on the `public` state variable that generates it. Do not add NatSpec to other declarations or write other comments, except for the tool directives below. Use descriptive names and split up functions when their logic is hard to follow.
 
 A comment can fall out of date when the code changes and mislead both people and coding agents.
 
@@ -433,7 +433,9 @@ We should avoid adding to these or defining any remappings explicitly, as it mak
 
 #### 1. Write complete NatSpec for every `external` or `public` function and every event.
 
-Include `@notice`, `@param` for each parameter, and `@return` for each return value. Document the behavior and invariants that callers rely on.
+Include `@notice`, `@param` for each named input, and `@return` for each return value. Describe intentionally unnamed inputs by position in `@dev`. Document the behavior and invariants that callers rely on.
+
+For compiler-generated getters, put `@notice` and `@return` on the `public` state variable. Describe getter inputs, such as mapping keys, in `@dev`. Solidity does not accept `@param` on state variable declarations.
 
 #### 2. Do not use `@inheritdoc`.
 
