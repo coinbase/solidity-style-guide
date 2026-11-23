@@ -435,7 +435,7 @@ We should avoid adding to these or defining any remappings explicitly, as it mak
 
 Include `@notice`, `@param` for each named input, and `@return` for each return value. Describe intentionally unnamed inputs by position in `@dev`. Document the behavior and invariants that callers rely on.
 
-For compiler-generated getters, put `@notice` and `@return` on the `public` state variable. Describe getter inputs, such as mapping keys, in `@dev`. Solidity does not accept `@param` on state variable declarations.
+For compiler-generated getters, put `@notice` and `@return` on the `public` state variable. Start each `@return` with the output name if it has one, even for a single output (for example, `@return amount The recorded balance.`). Describe getter inputs, such as mapping keys, in `@dev`. Solidity does not accept `@param` on state variable declarations.
 
 #### 2. Do not use `@inheritdoc`.
 
